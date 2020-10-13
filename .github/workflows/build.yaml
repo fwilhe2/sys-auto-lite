@@ -1,0 +1,15 @@
+name: CI
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: build
+      run: |
+        docker build -t sys-auto-lite .
+    - name: run
+      run: |
+        docker run --rm sys-auto-lite bash -c "/install-tools.sh"
