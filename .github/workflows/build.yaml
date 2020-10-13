@@ -4,12 +4,22 @@ on:
   workflow_dispatch:
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: build
+
+    - name: Set up Go 1.x
+      uses: actions/setup-go@v2
+      with:
+        go-version: ^1.15
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Get dependencies
       run: |
-        docker build -t sys-auto-lite .
-    - name: run
-      run: |
-        docker run --rm sys-auto-lite bash -c "/install-tools.sh"
+        go get -v -t -d ./...
+
+    - name: Build
+      run: go build -v .
